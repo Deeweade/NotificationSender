@@ -1,0 +1,77 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationSender.API", "NotificationSender.API\NotificationSender.API.csproj", "{C098BAA4-036D-4346-867E-9CF9258335C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationSender.Application", "NotificationSender.Application\NotificationSender.Application.csproj", "{F1EFA23F-3F23-46E0-A1F9-8648A2B169CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationSender.Domain", "NotificationSender.Domain\NotificationSender.Domain.csproj", "{A2ACCE49-B6C7-4253-9028-AFFCB1C3374B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationSender.Infrastructure", "NotificationSender.Infrastructure\NotificationSender.Infrastructure.csproj", "{6C1FE951-C9E7-4964-859B-DB11155EE764}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{0DA3AE96-51E1-4C5C-97DD-A666B41D99F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationSender.API.Tests", "Tests\NotificationSender.API.Tests\NotificationSender.API.Tests.csproj", "{06C7FD9B-85C7-4485-B50B-8D392A24D625}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationSender.Application.Tests", "Tests\NotificationSender.Application.Tests\NotificationSender.Application.Tests.csproj", "{248B0F70-67B1-4B3D-BC1A-3F24361B4DF4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationSender.Infrastructure.Tests", "Tests\NotificationSender.Infrastructure.Tests\NotificationSender.Infrastructure.Tests.csproj", "{FD2A79A6-EC9D-44F2-A16A-466E21F68BA2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationSender.Infrastructure.Abstractions", "NotificationSender.Infrastructure.Abstractions\NotificationSender.Infrastructure.Abstractions.csproj", "{3D4A0021-0715-4338-AC19-04EC5EF33372}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationSender.Application.Abstractions", "NotificationSender.Application.Abstractions\NotificationSender.Application.Abstractions.csproj", "{77B116C5-814B-4C24-B007-06C84F1C51FB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C098BAA4-036D-4346-867E-9CF9258335C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C098BAA4-036D-4346-867E-9CF9258335C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C098BAA4-036D-4346-867E-9CF9258335C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C098BAA4-036D-4346-867E-9CF9258335C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1EFA23F-3F23-46E0-A1F9-8648A2B169CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1EFA23F-3F23-46E0-A1F9-8648A2B169CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1EFA23F-3F23-46E0-A1F9-8648A2B169CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1EFA23F-3F23-46E0-A1F9-8648A2B169CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2ACCE49-B6C7-4253-9028-AFFCB1C3374B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2ACCE49-B6C7-4253-9028-AFFCB1C3374B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2ACCE49-B6C7-4253-9028-AFFCB1C3374B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2ACCE49-B6C7-4253-9028-AFFCB1C3374B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C1FE951-C9E7-4964-859B-DB11155EE764}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C1FE951-C9E7-4964-859B-DB11155EE764}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C1FE951-C9E7-4964-859B-DB11155EE764}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C1FE951-C9E7-4964-859B-DB11155EE764}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06C7FD9B-85C7-4485-B50B-8D392A24D625}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06C7FD9B-85C7-4485-B50B-8D392A24D625}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06C7FD9B-85C7-4485-B50B-8D392A24D625}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06C7FD9B-85C7-4485-B50B-8D392A24D625}.Release|Any CPU.Build.0 = Release|Any CPU
+		{248B0F70-67B1-4B3D-BC1A-3F24361B4DF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{248B0F70-67B1-4B3D-BC1A-3F24361B4DF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{248B0F70-67B1-4B3D-BC1A-3F24361B4DF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{248B0F70-67B1-4B3D-BC1A-3F24361B4DF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD2A79A6-EC9D-44F2-A16A-466E21F68BA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD2A79A6-EC9D-44F2-A16A-466E21F68BA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD2A79A6-EC9D-44F2-A16A-466E21F68BA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD2A79A6-EC9D-44F2-A16A-466E21F68BA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D4A0021-0715-4338-AC19-04EC5EF33372}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D4A0021-0715-4338-AC19-04EC5EF33372}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D4A0021-0715-4338-AC19-04EC5EF33372}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D4A0021-0715-4338-AC19-04EC5EF33372}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77B116C5-814B-4C24-B007-06C84F1C51FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77B116C5-814B-4C24-B007-06C84F1C51FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77B116C5-814B-4C24-B007-06C84F1C51FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77B116C5-814B-4C24-B007-06C84F1C51FB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{06C7FD9B-85C7-4485-B50B-8D392A24D625} = {0DA3AE96-51E1-4C5C-97DD-A666B41D99F5}
+		{248B0F70-67B1-4B3D-BC1A-3F24361B4DF4} = {0DA3AE96-51E1-4C5C-97DD-A666B41D99F5}
+		{FD2A79A6-EC9D-44F2-A16A-466E21F68BA2} = {0DA3AE96-51E1-4C5C-97DD-A666B41D99F5}
+	EndGlobalSection
+EndGlobal

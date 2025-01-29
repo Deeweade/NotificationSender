@@ -1,0 +1,130 @@
+# Программные файлы пользователя
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Командные файлы
+*.cmd
+*.bat
+
+# Системные файлы
+.DS_Store
+Thumbs.db
+
+# Бинарные файлы
+*.exe
+*.dll
+*.pdb
+*.ilk
+*.log
+*.cache
+*.so
+*.dylib
+
+# Папки сборки
+**/bin/*
+**/obj/*
+
+# Кэш NuGet
+packages/
+*.nupkg
+*.snupkg
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Конфигурации Visual Studio
+.vscode/
+.vscode/*
+.vs/
+.vs/*
+
+# Конфигурационные файлы IDE
+.idea/
+*.sln.iml
+
+# ASP.NET проектные файлы
+project.lock.json
+project.fragment.lock.json
+artifacts/
+!**/lib/
+!**/packages.config
+*global.json
+
+# Конфигурации среды
+*.env
+
+# Локальные пользовательские настройки
+.vscode/settings.json
+
+# Конфигурационные файлы пользователя
+.vscode/tasks.json
+.vscode/launch.json
+.vscode/extensions.json
+
+# Конфигурации кэширования
+.vscode/.history
+
+# Файлы отчетов
+TestResult.xml
+TestResult.trx
+coverage/
+coverage.opencover.xml
+*.coverage
+*.coveragexml
+*.log
+
+# Лог-файлы и другие временные файлы
+*.log
+*.tlog
+
+# Файлы опубликованного сайта
+.publish/
+publish/
+
+# Библиотеки клиента
+node_modules/
+
+# Конфигурации статических ресурсов
+wwwroot/lib/
+
+# Конфигурационные файлы JetBrains Rider
+.idea/
+*.sln.iml
+
+# Файлы конфигурации для MacOS
+.DS_Store
+
+# Папка конфигурации NPM
+npm-debug.log
+yarn-error.log
+
+# Папка конфигурации базы данных
+sql/
+
+# Папки тестовых отчетов
+TestResults/
+.vstest/
+.vscode/TestResults/
+
+# Файлы конфигурации пакетов
+.bundle/
+.fusebox/
+node_modules/
+jspm_packages/
+typings/
+
+# Лог-файлы yarn
+yarn-debug.log*
+yarn-error.log*
+
+# Папки сред IDE
+.idea/
+.ionide/
+RiderProjects/
+
+# Конфигурационные файлы VS Code
+.vscode/*
+.history/
