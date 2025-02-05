@@ -15,8 +15,31 @@ public class ApplicationDbContext : DbContext
     public DbSet<NotificationRequest> NotificationRequests { get; set; }
     public DbSet<NotificationTemplate> NotificationTemplates { get; set; }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<NotificationChannel>()
+            .HasMany(x => x.ClientSystems)
+            .WithOne(x => x.DefaultNotificationChannel)
+            .HasForeignKey(x => x.DefaultNotificationChannelId)
+            .OnDelete(DeleteBehavior.NoAction);
+        
+        modelBuilder.Entity<NotificationChannel>()
+            .HasMany(x => x.SentNotifications)
+            .WithOne(x => x.NotificationChannel)
+            .HasForeignKey(x => x.NotificationChannelId)
+            .OnDelete(DeleteBehavior.NoAction);
+        
+        modelBuilder.Entity<NotificationChannel>()
+            .HasMany(x => x.Templates)
+            .WithOne(x => x.NotificationChannel)
+            .HasForeignKey(x => x.NotificationChannelId)
+            .OnDelete(DeleteBehavior.NoAction);
+
         base.OnModelCreating(modelBuilder);
     }
 }

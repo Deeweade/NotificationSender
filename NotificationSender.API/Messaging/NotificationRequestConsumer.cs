@@ -1,4 +1,6 @@
 using NotificationSender.Application.Abstractions.Commands;
+using NotificationSender.API.Models;
+using Microsoft.Extensions.Options;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client;
 using Newtonsoft.Json;
@@ -10,14 +12,33 @@ namespace NotificationSender.API.Messaging;
 public class NotificationRequestConsumer : BackgroundService
 {
     private readonly IServiceProvider _serviceProvider;
+    private readonly IConnection _connection;
     private readonly IModel _channel;
 
-    public NotificationRequestConsumer(IServiceProvider serviceProvider, IModel channel)
+    public NotificationRequestConsumer(IServiceProvider serviceProvider, IOptions<RabbitMQOptions> rabbitOptions)
     {
         _serviceProvider = serviceProvider;
-        _channel = channel;
+        var options = rabbitOptions.Value;
 
-        _channel.QueueDeclare(queue: "NotificationSenderQueue", durable: true, exclusive: false, autoDelete: false);
+        var factory = new ConnectionFactory
+        {
+            HostName = options.HostName,
+            Port = options.Port,
+            UserName = options.UserName,
+            Password = options.Password,
+            DispatchConsumersAsync = true
+        };
+
+        _connection = factory.CreateConnection();
+        _channel = _connection.CreateModel();
+
+        // Объявляем очередь. Если очередь уже существует, параметры должны совпадать.
+        _channel.QueueDeclare(
+            queue: "NotificationSenderQueue",
+            durable: true,
+            exclusive: false,
+            autoDelete: false,
+            arguments: null);
     }
 
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -36,11 +57,23 @@ public class NotificationRequestConsumer : BackgroundService
                 await mediator.Send(notificationRequest, stoppingToken);
             }
 
-            _channel.BasicAck(ea.DeliveryTag, false);
+            // Подтверждаем обработку сообщения.
+            _channel.BasicAck(ea.DeliveryTag, multiple: false);
         };
 
-        _channel.BasicConsume(queue: "NotificationSenderQueue", autoAck: false, consumer: consumer);
+        // Запускаем потребителя на очереди с autoAck отключённым.
+        _channel.BasicConsume(
+            queue: "NotificationSenderQueue",
+            autoAck: false,
+            consumer: consumer);
 
         return Task.CompletedTask;
+    }
+
+    public override void Dispose()
+    {
+        _channel?.Close();
+        _connection?.Close();
+        base.Dispose();
     }
 }

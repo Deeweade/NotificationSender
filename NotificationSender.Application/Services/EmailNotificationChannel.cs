@@ -48,8 +48,8 @@ public class EmailNotificationChannel : INotificationChannel
 
         using (var client = new SmtpClient())
         {
-            await client.ConnectAsync("smtp.your-email-provider.com", 587, false, cancellationToken);
-            await client.AuthenticateAsync("your-email@example.com", "your-email-password", cancellationToken);
+            await client.ConnectAsync("mailhog", 1025, false, cancellationToken);
+            //await client.AuthenticateAsync("your-email@example.com", "your-email-password", cancellationToken);
             await client.SendAsync(message, cancellationToken);
             await client.DisconnectAsync(true, cancellationToken);
         }
