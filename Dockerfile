@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:9.0-preview AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0-preview AS build
 WORKDIR /app
 
 COPY NotificationSender.sln ./
@@ -16,7 +16,7 @@ COPY . .
 
 RUN dotnet publish "NotificationSender.API/NotificationSender.API.csproj" -c Debug -o /app/publish
 
-FROM mcr.microsoft.com/dotnet/aspnet:9.0-preview AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-preview AS runtime
 WORKDIR /app
 EXPOSE 8081
 
