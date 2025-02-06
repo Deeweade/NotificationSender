@@ -14,7 +14,7 @@ RUN dotnet restore "NotificationSender.API/NotificationSender.API.csproj"
 
 COPY . .
 
-RUN dotnet publish "NotificationSender.API/NotificationSender.API.csproj" -c Release -o /app/publish
+RUN dotnet publish "NotificationSender.API/NotificationSender.API.csproj" -c Debug -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0-preview AS runtime
 WORKDIR /app
