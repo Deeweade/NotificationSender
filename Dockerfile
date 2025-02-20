@@ -18,7 +18,7 @@ RUN dotnet publish "NotificationSender.API/NotificationSender.API.csproj" -c Deb
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
-EXPOSE 80
+EXPOSE 8181
 
 # Копируем опубликованные файлы
 COPY --from=build /app/publish .
