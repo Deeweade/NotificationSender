@@ -43,7 +43,7 @@ public class NotificationRequestConsumer : BackgroundService
 
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        var consumer = new EventingBasicConsumer(_channel);
+        var consumer = new AsyncEventingBasicConsumer(_channel);
         consumer.Received += async (_, ea) =>
         {
             var message = Encoding.UTF8.GetString(ea.Body.ToArray());
