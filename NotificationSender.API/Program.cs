@@ -14,7 +14,21 @@ using Microsoft.OpenApi.Models;
 using RabbitMQ.Client;
 using AutoMapper;
 
-var builder = WebApplication.CreateBuilder(args);
+#region EnvironmentConfiguring
+
+var builder = WebApplication.CreateBuilder();
+
+var environmentName = builder.Environment.EnvironmentName;
+
+var settingsPath = Path.Combine(Directory.GetCurrentDirectory(), "Settings");
+
+builder.Configuration
+    .SetBasePath(settingsPath)
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
+    .AddEnvironmentVariables();
+
+#endregion
 
 #region ControllersConfiguring
 
@@ -29,19 +43,16 @@ builder.Services.AddControllers(options =>
 
 #endregion
 
+#region ContextsConfiguring
+
 string connectionString = builder.Configuration.GetConnectionString("NotificationSender");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString, b => b.MigrationsAssembly("NotificationSender.API")));
 
-var mapperConfig = new MapperConfiguration(mc =>
-{
-    mc.AddProfile(new InfrastructureMappingProfile());
-});
+#endregion
 
 #region DependenciesInjection
-
-builder.Services.AddSingleton(mapperConfig.CreateMapper());
 
 builder.Services.AddMediatR(cfg =>
 {
@@ -68,6 +79,13 @@ builder.Services.AddScoped<ISentNotificationRepository, SentNotificationReposito
 builder.Services.AddScoped(typeof(IRepository<,>), typeof(BaseRepository<,>));
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+var mapperConfig = new MapperConfiguration(mc =>
+{
+    mc.AddProfile(new InfrastructureMappingProfile());
+});
+
+builder.Services.AddSingleton(mapperConfig.CreateMapper());
 
 #endregion
 
