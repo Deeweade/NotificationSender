@@ -4,9 +4,9 @@ using NotificationSender.Application.Abstractions.Services;
 using NotificationSender.Infrastructure.Abstractions.DTOs;
 using MediatR;
 
-namespace NotificationSender.Application.Commands;
+namespace NotificationSender.Application.Handlers;
 
-public class NotificationRequestHandler : IRequestHandler<NotificationRequestCommand, Unit>
+public class NotificationRequestHandler : IRequestHandler<NotificationRequestCreatedCommand, Unit>
 {
     private readonly INotificationService _notificationService;
     private readonly IUnitOfWork _unitOfWork;
@@ -17,7 +17,7 @@ public class NotificationRequestHandler : IRequestHandler<NotificationRequestCom
         _notificationService = notificationService;
     }
 
-    public async Task<Unit> Handle(NotificationRequestCommand command, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(NotificationRequestCreatedCommand command, CancellationToken cancellationToken)
     {
         var request = new NotificationRequestDto
         {

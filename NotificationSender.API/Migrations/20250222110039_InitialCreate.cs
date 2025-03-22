@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace NotificationSender.API.Migrations
 {
     /// <inheritdoc />
@@ -88,7 +90,7 @@ namespace NotificationSender.API.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SystemEventId = table.Column<int>(type: "int", nullable: false),
-                    ChannelType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NotificationChannelId = table.Column<int>(type: "int", nullable: false),
                     RecipientAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Payload = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RedirectNotifications = table.Column<bool>(type: "bit", nullable: false),
@@ -98,6 +100,12 @@ namespace NotificationSender.API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_NotificationRequests", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_NotificationRequests_NotificationChannels_NotificationChannelId",
+                        column: x => x.NotificationChannelId,
+                        principalTable: "NotificationChannels",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_NotificationRequests_SystemEvents_SystemEventId",
                         column: x => x.SystemEventId,
@@ -172,10 +180,45 @@ namespace NotificationSender.API.Migrations
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.InsertData(
+                table: "NotificationChannels",
+                columns: new[] { "Id", "IsEnabled", "Name" },
+                values: new object[,]
+                {
+                    { 1, true, "Mail" },
+                    { 2, false, "SMS" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "ClientSystems",
+                columns: new[] { "Id", "DefaultDisplayName", "DefaultNotificationChannelId", "DefaultRedirectEmail", "DefaultSenderEmail", "DefaultSenderPhone", "SystemName" },
+                values: new object[,]
+                {
+                    { 1, "Система отпусков", 1, null, "email@gmail.com", null, "Absence" },
+                    { 2, "Мои цели", 1, null, "email@gmail.com", null, "My goals" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "SystemEvents",
+                columns: new[] { "Id", "ConsumerSystemId", "EventName" },
+                values: new object[,]
+                {
+                    { 1, 1, "Сотрудник направил отпуска на согласование" },
+                    { 2, 1, "Руководитель отклонил отпуск" },
+                    { 3, 1, "Руководитель согласовал отпуск" },
+                    { 4, 1, "Руководитель отклонил все отпуска" },
+                    { 5, 1, "Руководитель согласовал все отпуска" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_ClientSystems_DefaultNotificationChannelId",
                 table: "ClientSystems",
                 column: "DefaultNotificationChannelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_NotificationRequests_NotificationChannelId",
+                table: "NotificationRequests",
+                column: "NotificationChannelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_NotificationRequests_SystemEventId",

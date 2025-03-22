@@ -12,7 +12,7 @@ using NotificationSender.Infrastructure.Contexts;
 namespace NotificationSender.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250204191451_InitialCreate")]
+    [Migration("20250222110039_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace NotificationSender.API.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.1")
+                .HasAnnotation("ProductVersion", "8.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -56,6 +56,24 @@ namespace NotificationSender.API.Migrations
                     b.HasIndex("DefaultNotificationChannelId");
 
                     b.ToTable("ClientSystems");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DefaultDisplayName = "Система отпусков",
+                            DefaultNotificationChannelId = 1,
+                            DefaultSenderEmail = "email@gmail.com",
+                            SystemName = "Absence"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            DefaultDisplayName = "Мои цели",
+                            DefaultNotificationChannelId = 1,
+                            DefaultSenderEmail = "email@gmail.com",
+                            SystemName = "My goals"
+                        });
                 });
 
             modelBuilder.Entity("NotificationSender.Domain.Entities.NotificationChannel", b =>
@@ -75,6 +93,20 @@ namespace NotificationSender.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("NotificationChannels");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            IsEnabled = true,
+                            Name = "Mail"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            IsEnabled = false,
+                            Name = "SMS"
+                        });
                 });
 
             modelBuilder.Entity("NotificationSender.Domain.Entities.NotificationRequest", b =>
@@ -85,11 +117,11 @@ namespace NotificationSender.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ChannelType")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("NotificationChannelId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Payload")
                         .HasColumnType("nvarchar(max)");
@@ -107,6 +139,8 @@ namespace NotificationSender.API.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("NotificationChannelId");
 
                     b.HasIndex("SystemEventId");
 
@@ -229,6 +263,38 @@ namespace NotificationSender.API.Migrations
                     b.HasIndex("ConsumerSystemId");
 
                     b.ToTable("SystemEvents");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ConsumerSystemId = 1,
+                            EventName = "Сотрудник направил отпуска на согласование"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ConsumerSystemId = 1,
+                            EventName = "Руководитель отклонил отпуск"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ConsumerSystemId = 1,
+                            EventName = "Руководитель согласовал отпуск"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            ConsumerSystemId = 1,
+                            EventName = "Руководитель отклонил все отпуска"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            ConsumerSystemId = 1,
+                            EventName = "Руководитель согласовал все отпуска"
+                        });
                 });
 
             modelBuilder.Entity("NotificationSender.Domain.Entities.ConsumerSystem", b =>
@@ -244,11 +310,19 @@ namespace NotificationSender.API.Migrations
 
             modelBuilder.Entity("NotificationSender.Domain.Entities.NotificationRequest", b =>
                 {
+                    b.HasOne("NotificationSender.Domain.Entities.NotificationChannel", "NotificationChannel")
+                        .WithMany()
+                        .HasForeignKey("NotificationChannelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("NotificationSender.Domain.Entities.SystemEvent", "SystemEvent")
                         .WithMany("NotificationRequests")
                         .HasForeignKey("SystemEventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("NotificationChannel");
 
                     b.Navigation("SystemEvent");
                 });

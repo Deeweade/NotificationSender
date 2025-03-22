@@ -21,7 +21,7 @@ public class EmailNotificationChannel : INotificationChannel
 
     public NotificationChannels ChannelType
     {
-        get => NotificationChannels.Mail;
+        get => NotificationChannels.Email;
     }
 
     public async Task<SentNotificationDto> SendAsync(
@@ -58,7 +58,7 @@ public class EmailNotificationChannel : INotificationChannel
         {
             NotificationRequestId = request.Id,
             NotificationStatusId = (int)NotificationStatuses.Sent,
-            NotificationChannelId = (int)NotificationChannels.Mail,
+            NotificationChannelId = (int)NotificationChannels.Email,
             SenderAddress = template.SystemEvent.ClientSystem.DefaultSenderEmail,
             UsedRecipientAddress = recipientAddress,
             Subject = subject,

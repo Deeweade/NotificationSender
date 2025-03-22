@@ -4,14 +4,16 @@ using NotificationSender.Application.Abstractions.Services;
 using NotificationSender.Infrastructure.Persistence;
 using NotificationSender.Infrastructure.Contexts;
 using NotificationSender.Infrastructure.Mappings;
-using NotificationSender.Application.Commands;
+using NotificationSender.Application.Handlers;
 using NotificationSender.Application.Services;
-using NotificationSender.API.Messaging;
+using NotificationSender.API.Middlewares;
 using NotificationSender.API.Models;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using RabbitMQ.Client;
+using Serilog.Sinks.Elasticsearch;
+using Serilog;
+using MassTransit;
 using AutoMapper;
 
 #region EnvironmentConfiguring
@@ -58,13 +60,30 @@ builder.Services.AddMediatR(cfg =>
 {
     cfg.RegisterServicesFromAssembly(typeof(NotificationRequestHandler).Assembly);
 });
-builder.Services.AddSingleton(sp =>
+
+var rabbitMqOptions = builder.Configuration.GetSection("RabbitMq").Get<ExternalServiceOptions>();
+
+builder.Services.AddMassTransit(x =>
 {
-    var connectionFactory = new ConnectionFactory { HostName = "localhost" };
-    return connectionFactory.CreateConnection().CreateModel();
+    var assembly = typeof(Program).Assembly;
+    x.AddConsumers(assembly);
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host(rabbitMqOptions.HostName, (ushort)rabbitMqOptions.Port, "/", h =>
+        {
+            h.Username(rabbitMqOptions.UserName);
+            h.Password(rabbitMqOptions.Password);
+        });
+        cfg.ConfigureEndpoints(context);
+    });
 });
-builder.Services.AddHostedService<NotificationRequestConsumer>();
-builder.Services.Configure<RabbitMQOptions>(builder.Configuration.GetSection("RabbitMQ"));
+// builder.Services.AddSingleton(sp =>
+// {
+//     var connectionFactory = new ConnectionFactory { HostName = "localhost" };
+//     return connectionFactory.CreateConnection().CreateModel();
+// });
+// builder.Services.AddHostedService<NotificationRequestConsumer>();
+// builder.Services.Configure<RabbitMQOptions>(builder.Configuration.GetSection("RabbitMQ"));
 
 builder.Services.AddScoped<INotificationTemplateProcessor, NotificationTemplateProcessor>();
 builder.Services.AddScoped<INotificationChannelProvider, NotificationChannelProvider>();
@@ -86,6 +105,29 @@ var mapperConfig = new MapperConfiguration(mc =>
 });
 
 builder.Services.AddSingleton(mapperConfig.CreateMapper());
+
+#endregion
+
+#region Logs
+
+var elkOptions = builder.Configuration.GetSection("ElasticSearch").Get<ExternalServiceOptions>();
+
+Log.Logger = new LoggerConfiguration()
+    .Enrich.FromLogContext()
+    .Enrich.WithMachineName()
+    .Enrich.WithThreadId()
+    .Enrich.WithEnvironmentName()
+    .WriteTo.Console()
+    .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri($"{elkOptions.HostName}:{elkOptions.Port}"))
+    {
+        AutoRegisterTemplate = true,
+        IndexFormat = $"dotnet-logs-{DateTime.Now:yyyy.MM.dd}",
+        NumberOfReplicas = 1,
+        NumberOfShards = 2
+    })
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 #endregion
 
@@ -115,6 +157,10 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 #region ApplicationSettingUp
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+app.UseSerilogRequestLogging();
 
 if (app.Environment.IsProduction())
 {

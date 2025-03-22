@@ -52,7 +52,7 @@ public class EmailNotificationChannelTests
         {
             Id = 1,
             RecipientAddress = "user@example.com",
-            Payload = "{ \"name\": \"Test User\" }",
+            Payload = new Dictionary<string, string> { {"{{name}}", "Test User" }},
             RedirectNotifications = false
         };
 
@@ -71,7 +71,7 @@ public class EmailNotificationChannelTests
         };
 
         _mockTemplateProcessor
-            .Setup(tp => tp.ProcessTemplate(It.IsAny<string>(), It.IsAny<string>()))
+            .Setup(tp => tp.ProcessTemplate(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()))
             .Returns("Hello, Test User!");
 
         // Act
@@ -107,7 +107,7 @@ public class EmailNotificationChannelTests
             RedirectNotifications = true,
             RedirectAddress = "redirect@example.com",
             RecipientAddress = "user@example.com",
-            Payload = "{ \"name\": \"Test User\" }"
+            Payload = new Dictionary<string, string> { {"{{name}}", "Test User" }}
         };
 
         var template = new NotificationTemplateDto
@@ -126,7 +126,7 @@ public class EmailNotificationChannelTests
         };
 
         _mockTemplateProcessor
-            .Setup(tp => tp.ProcessTemplate(It.IsAny<string>(), It.IsAny<string>()))
+            .Setup(tp => tp.ProcessTemplate(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()))
             .Returns("Hello, Test User!");
 
         // Act

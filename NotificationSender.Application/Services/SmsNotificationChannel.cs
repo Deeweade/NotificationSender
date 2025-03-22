@@ -36,7 +36,7 @@ public class SmsNotificationChannel : INotificationChannel
         {
             NotificationRequestId = request.Id,
             NotificationStatusId = (int)NotificationStatuses.Sent,
-            NotificationChannelId = (int)NotificationChannels.Mail,
+            NotificationChannelId = (int)NotificationChannels.Email,
             SenderAddress = template.SystemEvent.ClientSystem.DefaultSenderEmail,
             UsedRecipientAddress = request.RecipientAddress,
             Body = message,

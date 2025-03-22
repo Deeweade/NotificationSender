@@ -1,6 +1,6 @@
 namespace NotificationSender.API.Models;
 
-public class RabbitMQOptions
+public class ExternalServiceOptions
 {
     public int Port { get; set; }    
     public string HostName { get; set; }

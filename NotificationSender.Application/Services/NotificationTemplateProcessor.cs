@@ -5,21 +5,15 @@ namespace NotificationSender.Application.Services;
 
 public class NotificationTemplateProcessor : INotificationTemplateProcessor
 {
-    public string ProcessTemplate(string template, string payload)
+    public string ProcessTemplate(string template, Dictionary<string, string> payload)
     {
-        if (string.IsNullOrEmpty(payload))
-            return template;
-
+        ArgumentNullException.ThrowIfNull(payload);
+        
         try
         {
-            var payloadDict = JsonSerializer.Deserialize<Dictionary<string, string>>(payload);
-
-            if (payloadDict != null)
+            foreach (var kvp in payload)
             {
-                foreach (var kvp in payloadDict)
-                {
-                    template = template.Replace($"{{{{{kvp.Key}}}}}", kvp.Value);
-                }
+                template = template.Replace($"{{{{{kvp.Key}}}}}", kvp.Value);
             }
         }
         catch (JsonException ex)
